@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.customer.CustomerMapper">
+
+	<resultMap type="entity.Customer" id="baseCustomer">
+		<result column="orderdate" property="orderdate" />
+		<result column="cid" property="cid" />
+		<result column="age" property="age" />
+		<result column="name" property="name" />
+		<result column="sex" property="sex" />
+		<result column="interntion" property="interntion" />
+		<result column="phone" property="phone" />
+		<association property="sales" column="uid"
+			select="dao.sales.SalesMapper.getById">
+		</association>
+	</resultMap>
+	<select id="getIntention" parameterType="int"
+		resultMap="baseCustomer">
+		select *from customer where intention=#{value}
+	</select>
+
+	<insert id="addCustomer">
+		insert into customer
+		(age,name,sex,phone,intention,uid,orderdate
+		)values(#{age},#{name},#{sex},#{phone},#{intention},#{uid},#{orderdate,jdbcType=DATE}
+		)
+	</insert>
+
+	<update id="updateCustomer">
+		update customer set
+		age=#{age},
+		name=#{name},
+		phone=#{phone},
+		sex=#{sex},
+		intention=#{intention},
+		uid=#{uid},
+		orderdate=#{orderdate,jdbcType=DATE}
+		where cid=#{cid}
+	</update>
+	<delete id="deleteIntention">
+		delete from customer where cid=#{value}
+	</delete>
+</mapper>

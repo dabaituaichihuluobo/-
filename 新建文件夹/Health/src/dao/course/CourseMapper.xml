@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.course.CourseMapper">
+
+	<resultMap type="entity.Course" id="basecourse">
+		<result column="id" property="id" />
+		<result column="classes" property="classes" />
+		<result column="buyclass" property="buyclass" />
+		<result column="overclass" property="overclass" />
+		<result column="residue" property="residue" />
+		<result column="orderdate" property="orderdate" />
+		<association column="vid" property="vip"
+			select="dao.vip.VipMapper.getById"></association>
+		<association column="cid" property="coach"
+			select="dao.coach.CoachMapper.getById"></association>
+	</resultMap>
+
+	<select id="getAll" resultMap="basecourse">
+		select * from course where state=1
+	</select>
+	
+	<select id="dqgetAll" resultMap="basecourse">
+		select * from course where state=1
+	</select>
+
+	<select id="getById" parameterType="int" resultMap="basecourse">
+		select * from
+		course where id=#{id}
+	</select>
+
+	<update id="deleteCourse">
+		update course set state=2 where id=#{value}
+	</update>
+	
+	<insert id="addClass">
+		insert into course (cid,classes,buyclass,orderdate,vid) values (#{cid},#{classes},#{buyclass},#{orderdate},(select vid from vip where vipnum=#{vipnum}))
+	</insert>
+
+	<update id="updateCourseById">
+		update course set
+		orderdate=#{orderdate,javaType=java.util.Date},
+		classes=#{classes},
+		cid=#{cid},
+		buyclass=#{buyclass},
+		overclass=#{overclass},
+		residue=#{residue}
+		where id=#{id}
+	</update>
+
+</mapper>

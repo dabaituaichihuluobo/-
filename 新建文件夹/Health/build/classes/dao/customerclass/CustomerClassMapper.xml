@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.customerclass.CustomerClassMapper">
+
+	<resultMap type="entity.CustomerClass" id="baseCustomerClass">
+		<result column="ccid" property="ccid" />
+		<association column="vid" property="vip"
+			select="dao.vip.VipMapper.getById">
+		</association>
+		<association column="cid" property="coach"
+			select="dao.coach.CoachMapper.getById">
+		</association>
+	</resultMap>
+	<select id="getIntentionclass" parameterType="int"
+		resultMap="baseCustomerClass">
+		select *from customerclass where intention=#{value} and state=1
+	</select>
+	
+	<update id="deleteClass">
+		update customerclass set state=2 where ccid=#{value}
+	</update>
+	
+</mapper>

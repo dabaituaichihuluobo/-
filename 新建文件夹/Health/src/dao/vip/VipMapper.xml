@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.vip.VipMapper">
+
+
+	<select id="getAll" resultType="entity.Vip">
+	
+		select * from vip where state=1
+	</select>
+	<select id="getMaxVipnum" resultType="int">
+		select max(vipnum) as id
+		from vip 
+	</select>
+	<select id="getById" parameterType="int" resultType="entity.Vip">
+		select * from vip where vid=#{vid}
+	</select>
+	<select id="getByVipnum" resultType="entity.Vip" parameterType="int">
+		select *from vip where vipnum=#{value}
+	</select>
+	
+	
+	
+	<insert id="addNewVip">
+		insert into
+		vip(joindate,age,sex,phone,viplength,uid,note,name,vipnum,expire )
+		values(
+		SYSDATE(),
+		#{age},
+		#{sex},
+		#{phone},
+		#{viplength},
+		#{uid},
+		#{note},
+		#{name},
+		#{vipnum},
+		<if test="viplength==1">date_add(now(),interval 1 quarter)</if>
+		<if test="viplength==2">date_add(now(),interval 6 month)</if>
+		<if test="viplength==3">date_add(now(),interval 1 year)</if>
+		
+		)
+	</insert>
+
+	<update id="updateVipByVipnum">
+	update vip set
+		age=#{age},
+		sex=#{sex},
+		phone=#{phone},
+		viplength=#{viplength},
+		uid=#{uid},
+		note=#{note},
+		name=#{name},
+		expire=
+		<if test="viplength==1">date_add(joindate,interval 1 quarter)</if>
+		<if test="viplength==2">date_add(joindate,interval 1 quarter)</if>
+		<if test="viplength==3">date_add(joindate,interval 1 quarter)</if>
+		where vipnum=#{vipnum}
+	</update>
+	
+<update id="deleteVip">
+		update vip set state=2 where vid=#{value}
+</update>
+</mapper>
